@@ -100,7 +100,7 @@ NACA 9112 is carried forward as the propeller blade airfoil section for the full
 
 ## Propeller Geometry Optimisation
 
-After selecting `NACA 9112`, the final propeller is designed in `propeller_design.py` for a **Spitfire Mk 24** operating point:
+After selecting `NACA 9112`, the final propeller is designed in `propeller_design.py` .We take **Spitfire Mk 24** as the base of optimisation for the operating point:
 
 | Parameter | Value |
 |---|---|
