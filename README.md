@@ -1,15 +1,13 @@
-# AAE3001 — Propeller and Wing Aerodynamic Design
+# AAE3001 — Propeller Aerodynamic Design
 
-A student project covering two aerodynamic design problems:
-1. Propeller thrust analysis using Blade Element Momentum Theory (BEMT)
-2. Wing airfoil selection for maximum lift coefficient using NeuralFoil
+A student project on propeller design using Blade Element Momentum Theory (BEMT) and NeuralFoil airfoil analysis.
 
 ## Overview
 
 | Script | Purpose |
 |---|---|
 | `bem_validation_script.py` | BEM propeller validation + C_T optimisation |
-| `naca_sweep_phase1.py` | NACA 4-digit sweep for max CL (2D airfoil, Phase 1) |
+| `naca_sweep_phase1.py` | NACA 4-digit sweep to select best blade section airfoil |
 
 ## Requirements
 
@@ -31,11 +29,11 @@ python3 bem_validation_script.py
 ```
 Prints C_T validation results for twist angles 1°, 8°, 15°, then runs the SLSQP optimiser for the drone propeller geometry.
 
-**Wing airfoil sweep:**
+**Blade section airfoil sweep:**
 ```bash
 python3 naca_sweep_phase1.py
 ```
-Sweeps all 656 valid NACA 4-digit profiles and ranks them by maximum CL. Saves full results to `naca_sweep_results.csv`.
+Sweeps all 656 valid NACA 4-digit profiles and ranks them by maximum CL at the design flight condition. Saves full results to `naca_sweep_results.csv`. Selected blade section: **NACA 9112**.
 
 ## Validation
 
@@ -53,7 +51,7 @@ A standard 3-blade rectangular propeller (R = 1.829 m, c = 0.1524 m, 600 RPM, NA
 
 The BEM code consistently over-predicts C_T by ~8–13%. This is expected: the model assumes zero drag (`dD sin φ ≈ 0`) and includes no tip-loss correction, both of which reduce real-world thrust.
 
-## Wing Airfoil Selection — Phase 1
+## Blade Section Airfoil Selection
 
 ### Flight Conditions
 
@@ -62,12 +60,9 @@ The BEM code consistently over-predicts C_T by ~8–13%. This is expected: the m
 | Altitude | 10,000 ft (3,048 m) |
 | Speed range | 200 – 300 kts |
 | Mach range | 0.313 – 0.470 |
-| Reynolds number (chord = 2 m) | 11.0M – 16.5M |
 | Air density | 0.905 kg/m³ |
 
-Compressibility is accounted for using the **Prandtl-Glauert correction** applied on top of NeuralFoil's incompressible predictions:
-
-$$C_L^{\text{corrected}} = \frac{C_L^{\text{incompressible}}}{\sqrt{1 - M^2}}$$
+Compressibility accounted for using the **Prandtl-Glauert correction**: CL_corrected = CL / √(1 − M²)
 
 | Speed | Mach | PG factor |
 |:---:|:---:|:---:|
@@ -92,6 +87,6 @@ $$C_L^{\text{corrected}} = \frac{C_L^{\text{incompressible}}}{\sqrt{1 - M^2}}$$
 | 9 | NACA 8812 | 2.509 | 2.620 | 2.756 | 2.629 |
 | 10 | NACA 9821 | 2.513 | 2.616 | 2.743 | 2.624 |
 
-**Best airfoil: NACA 9112** — 9% camber, camber at 10% chord, 12% thickness.
+**Selected blade section: NACA 9112** — 9% camber, camber at 10% chord, 12% thickness.
 
-> Note: Top-ranked profiles all use high camber (7–9%), which maximises CL but increases pitching moment. A camber limit of 4–5% is typical for practical fixed-wing aircraft.
+NACA 9112 is carried forward as the propeller blade airfoil section for the full BEM propeller design.
