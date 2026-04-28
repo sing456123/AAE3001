@@ -1,2 +1,4 @@
 CLAUDE.md
 *.pdf
+.claude/
+__pycache__/
