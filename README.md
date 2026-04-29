@@ -8,7 +8,8 @@ A student project on propeller design using Blade Element Momentum Theory (BEMT)
 |---|---|
 | `bem_validation_script.py` | BEM propeller validation + C_T optimisation |
 | `naca_sweep_phase1.py` | NACA 4-digit sweep to select best blade section airfoil |
-| `propeller_design.py` | Piecewise-linear chord/twist optimisation for the final propeller |
+| `propeller_design.py` | Piecewise-linear chord/twist optimisation for maximum `C_T` |
+| `propeller_design_eta.py` | Piecewise-linear chord/twist optimisation for maximum efficiency `eta` |
 
 ## Requirements
 
@@ -41,6 +42,12 @@ Sweeps all 656 valid NACA 4-digit profiles and ranks them by maximum CL at the d
 python3 propeller_design.py
 ```
 Uses the selected `NACA 9112` airfoil together with a BEM + NeuralFoil model to optimise the blade chord and twist distributions. Saves the final plot to `propeller_design.png`.
+
+**Alternative efficiency optimisation:**
+```bash
+python3 propeller_design_eta.py
+```
+Uses the same aerodynamic model and geometry parameterisation, but switches the objective from maximum `C_T` to maximum propeller efficiency `eta`. Saves the final plot to `propeller_design_eta.png`.
 
 ## Validation
 
@@ -100,7 +107,7 @@ NACA 9112 is carried forward as the propeller blade airfoil section for the full
 
 ## Propeller Geometry Optimisation
 
-After selecting `NACA 9112`, the final propeller is designed in `propeller_design.py` .We take **Spitfire Mk 24** as the base of optimisation for the operating point:
+After selecting `NACA 9112`, the final propeller is designed for a **Spitfire Mk 24** operating point:
 
 | Parameter | Value |
 |---|---|
@@ -113,12 +120,12 @@ After selecting `NACA 9112`, the final propeller is designed in `propeller_desig
 
 ### How the optimisation works
 
-The script uses a **7-point piecewise-linear parameterisation** for both chord and twist.
+Both `propeller_design.py` and `propeller_design_eta.py` use a **7-point piecewise-linear parameterisation** for chord and twist.
 
 - 7 control points define the spanwise chord distribution.
 - 7 control points define the spanwise twist distribution.
 - `np.interp(...)` is used to build the full blade shape between adjacent control points.
-- `scipy.optimize.minimize(..., method="SLSQP")` adjusts those control-point values to maximise thrust coefficient `C_T` at the design point.
+- `scipy.optimize.minimize(..., method="SLSQP")` adjusts those control-point values at the design point.
 - Chord is constrained to taper monotonically from root to tip.
 - Twist is also constrained to decrease monotonically from root to tip.
 - Twist bounds are referenced to the local design-point inflow angle so the blade stays in a physically reasonable positive-AoA range.
@@ -131,12 +138,26 @@ For each optimisation step, the code:
 4. Integrates the elemental loads to obtain total `C_T`, `C_Q`, and efficiency.
 5. Repeats until SLSQP finds the best chord/twist control-point set.
 
-### Current best geometry
+### Maximum `C_T` result
 
-The current optimised result uses:
+`propeller_design.py` uses thrust coefficient as the objective, so it searches for the geometry that maximises `C_T`.
+
+The current maximum-`C_T` result uses:
 
 - Root-to-tip chord: **40.0 cm → 20.0 cm**
 - Root-to-tip twist: **87.3° → 44.0°**
 - Effective angle of attack kept roughly in the **5°–8.5°** range across the blade span
 
 ![Optimised propeller chord and twist distributions](propeller_design.png)
+
+### Maximum efficiency result
+
+`propeller_design_eta.py` uses propeller efficiency `eta` as the objective instead of `C_T`.
+
+The current maximum-efficiency result uses:
+
+- Root-to-tip chord: **5.0 cm → 2.0 cm**
+- Root-to-tip twist: **86.0° → 38.5°**
+- Effective angle of attack kept roughly in the **4.5°–8.2°** range across the blade span
+
+![Optimised propeller chord and twist distributions for max eta](propeller_design_eta.png)
