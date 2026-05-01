@@ -2,3 +2,10 @@ CLAUDE.md
 *.pdf
 .claude/
 __pycache__/
+.DS_Store
+Screenshot*.png
+naca_sweep_results.csv
+propeller_design_ct_eta.png
+gmsh_output*/
+gmsh_test*/
+gmsh_smoke/
