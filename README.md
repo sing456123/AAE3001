@@ -203,8 +203,4 @@ Key points from the report:
 
 This CFD result does not yet cleanly converge and should be treated as a first-order check, not a final validation. The report attributes the gap between CFD and BEMT to a combination of BEMT simplifications, mesh quality limitations, and the absence of a high-quality boundary-layer mesh.
 
-## Notes
 
-- The numerical results summarized here are taken from the submitted project report.
-- The optimisation scripts and the Gmsh script have continued to evolve beyond the original report draft.
-- The mesh-generation workflow is still the least mature part of the repository; expect to tune the Gmsh settings for your available hardware.
