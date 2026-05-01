@@ -76,7 +76,8 @@ This keeps the same aerodynamic model but changes the objective to maximum prope
 python3 propeller_design_ct_eta.py
 ```
 
-This maximises `CT` while enforcing an efficiency constraint. The current script uses an 11-point piecewise-linear geometry parameterisation and a default efficiency band of `0.92 <= eta <= 0.95`. Output figure: `propeller_design_ct_eta.png`
+This maximises `CT` while enforcing an efficiency constraint. The current script uses an 11-point piecewise-linear geometry parameterisation and a default efficiency band of `0.92 <= eta <= 0.95`. 
+Output figure: `propeller_design_ct_eta.png`
 
 **6. Gmsh mesh generation for OpenFOAM MRF**
 
