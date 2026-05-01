@@ -188,7 +188,7 @@ At the `250 kts` design point:
 
 This mode captures the main `CT`–`eta` tradeoff described in the report and is the most practical of the three current optimisation modes.
 
-The constrained optimisation script generates `propeller_design_ct_eta.png` when run locally.
+![Propeller result](propeller_design_ct_eta.png)
 
 ## CFD / OpenFOAM Verification
 
